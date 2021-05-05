@@ -7,7 +7,7 @@ Scrum Master/Fullstack Developer : Ian Tobin
 
 ## Your mental health helper for bringing specialists and those in need together ##
 
-##Branch out to specialists near you##
+Branch out to specialists near you
 
 ## Summary ##
    This application offers a way to assist people that are facing mental health challenges by allowing them to find proper help without breaking their bank. Users are able to sign up and easily search for specialists free of charge. These specialists specialize in treating an array of issues such as substance abuse, therapy, anxiety, depression and more. Additionally, specialists are also able to find users and other specialists for their personal needs. 
