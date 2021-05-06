@@ -4,8 +4,8 @@
 
 ## Team
 
-  - __Product Owner__: teamMember
-  - __Scrum Master__: teamMember
+  - __Product Owner / Full Stack Developer__: Davi Singh
+  - __Scrum Master / Full Stack Developer__: Ian Tobin
   - __Development Team Members__: teamMember, teamMember
 
 ## Table of Contents

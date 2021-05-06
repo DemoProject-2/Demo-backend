@@ -5,18 +5,18 @@ module.exports = {
   development: {
     client: 'postgresql',
     connection: {
-      database: 'bookLibrary',
-      user: 'Ian',
-      password: '1#531Tob'
+      database: 'MentalHealth',
+      user: process.env.databaseUsername,
+      password: process.env.DatabasePassword
     },
   },
 
   staging: {
     client: 'postgresql',
     connection: {
-      database: 'MentalHealthcare',
-      user:     'Ian',
-      password: '1#531Tob'
+      database: 'MentalHealth',
+      user: process.env.databaseUsername,
+      password: process.env.DatabasePassword
     },
     pool: {
       min: 2,
@@ -30,9 +30,9 @@ module.exports = {
   production: {
     client: 'postgresql',
     connection: {
-      database: 'my_db',
-      user:     'username',
-      password: 'password'
+      database: 'MentalHealth',
+      user: process.env.databaseUsername,
+      password: process.env.DatabasePassword
     },
     pool: {
       min: 2,
