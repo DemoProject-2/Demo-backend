@@ -1,14 +1,19 @@
 
 exports.up = function(knex) {
-  return knex.schema.createTable('users', function(table){
-    table.increments('user_id')
+  return knex.schema.createTable('patients', function(table){
+    table.increments('id').unsigned().primary()
     table.string('first_name')
     table.string('last_name')
     table.string('user_name').notNullable()
     table.string('email').notNullable()
     table.password('password').notNullable()
     table.string('medical_issue')
-    table.string('acct_type')
+    table.string('account_type')
+    table.integer('user_id').unsigned().notNullable()
+    table.foreign('user_id')
+      .reference('id')
+      .inTable('users')
+      .onDelete('CASCADE')
   })
 };
 
