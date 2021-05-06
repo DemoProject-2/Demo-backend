@@ -1,12 +1,14 @@
-//get all specialists from database
+//get all specialists from database completed
 async function getAllSpecialists(req, res) {
     try {
-        const specialists = await db.any("SELECT * FROM specialists");
+        const specialists = await db.any("SELECT * FROM specialists",
+        userID);
         return res.json(specialists);
     } catch (err) {
         res.status(500).send(err);
     }
 }
+
 //get a specialist matching id completed
 async function getSpecialistsById(req,res){
     const id=parseInt(res["specialist_id"],10)
@@ -17,6 +19,7 @@ async function getSpecialistsById(req,res){
         return res.status(500).json({message: err.message})
     }
 }
+
 //get specialist info
 async function SpecialistInfo(req,res){
     const specialistID=req.body["specialist_id"] ? parseInt(req.body["specialist_id"],10) : parseInt(req.params["specialist_id"])
