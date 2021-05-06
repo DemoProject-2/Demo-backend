@@ -5,8 +5,9 @@ exports.seed = function(knex) {
       // Inserts seed entries
       return knex('specialists').insert([
         //TODO: add more data to table and seed the data into it
-        {specialist_id: 4},
-        {specialist_id: 5}
+        {patient_id: 1},
+        {patient_id: 2},
+        {patient_id: 3}
       ]);
     });
 };

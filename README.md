@@ -1,12 +1,11 @@
-# Project Name
+# Mentality
 
-> Pithy project description
+> Web application to help end users seek out help for any mental health issues they may be facing
 
 ## Team
 
   - __Product Owner / Full Stack Developer__: Davi Singh
   - __Scrum Master / Full Stack Developer__: Ian Tobin
-  - __Development Team Members__: teamMember, teamMember
 
 ## Table of Contents
 

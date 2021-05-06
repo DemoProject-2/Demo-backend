@@ -1,8 +1,8 @@
-
+//TODO: add more data to table
 exports.up = function(knex) {
   return knex.schema.createTable('patients', function(table){
-    table.integer('user_id').unsigned().notNullable()
-    table.foreign('user_id')
+    table.integer('patient_id').unsigned().notNullable()
+    table.foreign('patient_id')
       .references('id')
       .inTable('users')
       .onDelete('CASCADE')
