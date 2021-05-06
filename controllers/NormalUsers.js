@@ -1,13 +1,13 @@
-//get all patients from database
+//get all normal users from database
 async function getAllPatients(req, res) {
     try {
-        const patients = await db.any("SELECT * FROM patients");
-        return res.json(patients);
+        const normal_users = await db.any("SELECT * FROM NormalUsers");
+        return res.json(normal_users);
     } catch (err) {
         res.status(500).send(err);
     }
 }
-
+//get normal users by concern 
 //register as a patient
 async function patientSignUp(req, res) {
     try {
