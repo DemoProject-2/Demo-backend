@@ -1,6 +1,6 @@
 require("dotenv").config();
-const db = require("../db")
-const bcrypt=require("bcrypt")
+//const db = require("../db")
+// const bcrypt=require("bcrypt")
 // const {generateToken} =  require("../middleware/users-auth")
 
 //get all users from database
@@ -28,10 +28,15 @@ async function getUserByName(req,res) {
 async function getAUser(req,res){
     const id=parseInt(res["user_id"],10)
     try {
-        const user = await db.none(`SELECT * FROM users WHERE id = $1`,
-        id)
+        const user = await db.none(`SELECT * FROM users WHERE id = $1`, id)
         return res.json(user)
     }catch(err){
         return res.status(500).json({message: err.message})
     }
 }
+
+module.exports = {
+    getAUser,
+    getAllUsers,
+    getUserByName
+};
