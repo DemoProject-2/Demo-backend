@@ -1,5 +1,5 @@
 require("dotenv").config();
-//const db = require("../db")
+const db = require("../seeds/seed_users")
 // const bcrypt=require("bcrypt")
 // const {generateToken} =  require("../middleware/users-auth")
 
@@ -116,5 +116,5 @@ async function userLogin(req,res){
 module.exports = {
     getAUser,
     getAllUsers,
-    getUserByName
+    getUserByName,
 };
