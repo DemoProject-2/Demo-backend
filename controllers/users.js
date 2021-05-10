@@ -1,5 +1,5 @@
 require("dotenv").config();
-const db = require("../seeds/seed_users")
+const db = require("../db")
 // const bcrypt=require("bcrypt")
 // const {generateToken} =  require("../middleware/users-auth")
 
@@ -27,9 +27,9 @@ async function getUserByName(req,res) {
 
 //get a single user from table
 async function getAUser(req,res){
-    const id=parseInt(res["user_id"],10)
+    const id=parseInt(res["id"],10)
     try {
-        const user = await db.none(`SELECT * FROM users WHERE id = $1`, id)
+        const user = await db.any(`SELECT * FROM users WHERE id = $1`, id)
         return res.json(user)
     }catch(err){
         return res.json({message: err.message})
