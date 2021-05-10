@@ -48,7 +48,7 @@ router.get('/user', getAUser);
 //get all users
 router.get('/all-users', getAllUsers);
 //get single user by name
-router.get('/get-named-user', getUserByName);
+router.get('/username', getUserByName);
 module.exports = router;
 
 //FOR TESTING: localhost:3000/users/get-single-uesr, localhost:3000/users/get-users, etc.

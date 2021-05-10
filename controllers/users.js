@@ -36,6 +36,83 @@ async function getAUser(req,res){
     }
 }
 
+//create one user and add to table not added to routes yet
+async function createUser(req,res){
+    let user=req.body
+    let hashedPassword;
+    const rounds=10
+    console.log('created user, ',user)
+    if(!user){
+        return res.status(400).json({
+            message:"Account Information Invalid"
+        })
+    }
+    try{
+        hashedPassword = await bcrypt.hash(user.password, rounds)
+        user["password"]=hashedPassword
+    }catch{
+        return res.status(401).json({
+            message: "Invalid Password",
+            error: err.message
+        })
+    }
+    let token;
+    try{
+        await db.none(`INSER INTO users (first_name, last_name, user_name, email, password, medical_issue, account_type) VALUES (${first_name}, ${last_name}, ${user_name}, ${email}, ${password}, ${medical_issue}, ${account_type})`,
+        user
+        )
+        const userID = await db.one(`SELECT id, account_type FROM users WHERE user_name=${user_name}`, user)
+        token=await generateToken(userID)
+    }catch(err){
+        console.log(`ERROR CAUGHT : ${err.message}`)
+        return res.status(400).send(err)
+    }
+    return res.status(201).json({token})
+
+}
+
+//delete a user from database not yet added to routes
+async function deleteUser(req,res) {
+    const id = parseInt(res["id"],10)
+    try{
+        await db.none(`DELETE FROM users WHERE id=$1`, id)
+        return res.json({
+            message:"successfully deleted",
+        })
+    } catch (err) {
+        res.status(500).json(err)
+    }
+}
+
+//login user not yet added to routes
+async function userLogin(req,res){
+    const{password}=req.body
+    const {exists} = await db.one(`SELECT EXISTS(SELECT * FROM users WHERE user_name=${user_name})`,req.body)
+    let user;
+    if(!exists){
+        return res.status(404).json({
+            message: "User Not Found"
+        })
+    } else {
+        user = await db.one(`SELECT * FROM users WHERE user_name=${user_name}`, req.body)
+        console.log(user)
+    }
+    let match;
+    try{
+        match=await bcrypt.compare(password, user.password)
+        if(!match){
+            return res.status(401).json({
+                message: "Invalid Credentials"
+            })
+        }else{
+            const token = await generateToken(user)
+            return res.status(202).json({"token":token})
+        }
+    } catch(err){
+        return res.status(400).json(err.message)
+    }
+}
+
 module.exports = {
     getAUser,
     getAllUsers,
