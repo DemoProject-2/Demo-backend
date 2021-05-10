@@ -3,7 +3,7 @@ exports.seed = function(knex) {
   return knex('patients').del()
     .then(function () {
       // Inserts seed entries
-      return knex('patientss').insert([
+      return knex('patients').insert([
         //TODO: add more data to table and seed the data into it
         {patient_id: 1},
         {patient_id: 2},

@@ -1,5 +1,5 @@
 const express = require('express')
-const router = express.Router()
+const router = new express.Router()
 //const db = require('../db')
 // const verifyToken = require('../middleware/verifytoken')
 // const bcrypt = require('bcrypt')
@@ -38,6 +38,11 @@ const {
 //         })
 //     }
 // })
+router.use(express.json());
+router.use((req, res, next) => {
+    console.log("users router");
+    next();
+  });
 
 router.get('/get-single-user', getAUser);
 

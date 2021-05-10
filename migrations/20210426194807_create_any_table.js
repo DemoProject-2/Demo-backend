@@ -6,7 +6,7 @@ exports.up = function(knex) {
       table.string('last_name')
       table.string('user_name').notNullable()
       table.string('email').notNullable()
-      table.password('password').notNullable()
+      table.string('password').notNullable()
       table.string('medical_issue')
       table.string('account_type')
     })

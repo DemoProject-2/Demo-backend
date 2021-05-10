@@ -7,9 +7,10 @@ require("dotenv").config();
 async function getAllUsers(req,res){
     try{
         const users = await db.any(`SELECT * FROM users`)
+        console.log(users)
         return res.json(users)
     }catch(err) {
-        res.status(500).send(err)
+        res.send(err)
     }
 }
 
@@ -20,7 +21,7 @@ async function getUserByName(req,res) {
         const results = await db.any(`SELECT * FROM users WHERE lower(user_name) LIKE '%${query.toLowerCase()}%';`)
         return res.status(200).json(results)
     }catch(err){
-        res.status(500).json(err.message)
+        res.json(err.message)
     }
 }
 
@@ -31,7 +32,7 @@ async function getAUser(req,res){
         const user = await db.none(`SELECT * FROM users WHERE id = $1`, id)
         return res.json(user)
     }catch(err){
-        return res.status(500).json({message: err.message})
+        return res.json({message: err.message})
     }
 }
 
