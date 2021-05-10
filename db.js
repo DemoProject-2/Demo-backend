@@ -2,10 +2,16 @@ const knexfile = require('./knexfile')
 const pg = require('pg-promise')()
 require('dotenv').config()
 
-const cn = `postgres://${process.env.DB_USER}:${process.env.DB_PASS}@${process.env.DB_HOST}:5432/alt_lane`
-
-const ENDPOINT = process.env.NODE_ENV === 'production' ? process.env.DATABASE_URL : cn
-
-const db = pg(ENDPOINT)
+const db = 
+process.env.NODE_ENV === 'production' ? pg({
+  connectionString: process.env.DATABASE_URL
+}) : 
+pg({
+  host: process.env.HOST,
+  port: 5432,
+  database: process.env.database,
+  user: process.env.DatabaseUsername,
+  password: process.env.DatabasePassword
+});
 
 module.exports = db
