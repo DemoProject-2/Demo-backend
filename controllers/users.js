@@ -36,6 +36,24 @@ async function getAUser(req,res){
     }
 }
 
+async function getAllSpecialists(req, res) {
+    try {
+        const specialists = await db.any('SELECT * FROM users WHERE "account_type = specialist');
+        return res.json(specialists);
+    } catch (err) {
+        res.send(err);
+    }
+}
+
+async function getAllPatients(req, res) {
+    try {
+        const patients = await db.any('SELECT * FROM users WHERE account_type = patient');
+        return res.json(patients);
+    } catch (err) {
+        res.send(err);
+    }
+}
+
 //create one user and add to table not added to routes yet
 async function createUser(req,res){
     let user=req.body
@@ -117,4 +135,6 @@ module.exports = {
     getAUser,
     getAllUsers,
     getUserByName,
+    getAllSpecialists,
+    getAllPatients
 };
