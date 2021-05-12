@@ -4,7 +4,7 @@ async function getAllSpecialists(req, res) {
         const specialists = await db.any("SELECT * FROM users WHERE users.id=specialists.specialists_id");
         return res.json(specialists);
     } catch (err) {
-        res.status(500).send(err);
+        res.send(err);
     }
 }
 
@@ -28,7 +28,7 @@ async function getSpecialistByName(req, res) {
         const specialists = await db.one(`SELECT specialists.specialist_id, users.first_name, users.last_name, users.medical_issue FROM specialists, users WHERE users.first_name = ${first} AND users.last_name = ${last}`);
         return res.json(specialists);
     } catch (err) {
-        res.status(500).send(err);
+        res.send(err);
     }
 }
 
@@ -40,7 +40,7 @@ async function getSpecialistsBySpecialty(req, res) {
         specialty);
         return res.json(specialists);
     } catch (err) {
-        res.status(500).send(err);
+        res.send(err);
     }
 }
 
@@ -52,7 +52,7 @@ async function specialistSignUp(req, res) {
         specialist);
         return res.json(specialists);
     } catch (err) {
-        res.status(500).send(err);
+        res.send(err);
     }
 }
 

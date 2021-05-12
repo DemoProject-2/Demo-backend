@@ -1,5 +1,5 @@
 const express = require('express')
-const db = require("../seeds/seed_users")
+//const db = require("../seeds/seed_users")
 const router = new express.Router()
 // const verifyToken = require('../middleware/verifytoken')
 // const bcrypt = require('bcrypt')
@@ -7,8 +7,12 @@ const router = new express.Router()
 const {
     getAUser,
     getAllUsers,
-    getUserByName
-} = require("../controllers/users")
+    getUserByName,
+    getAccountType,
+    getAllSpecialists,
+    getAllPatients
+} = require("../controllers/users");
+const { get } = require('./patients');
 
 // router.post('/sign-in', async function (req,res){
 //     try{
@@ -49,6 +53,12 @@ router.get('/user', getAUser);
 router.get('/all-users', getAllUsers);
 //get single user by name
 router.get('/username', getUserByName);
+//get all specialists
+router.get('/all-specialists', getAllSpecialists);
+//get all patients
+router.get('/all-patients', getAllPatients);
+//filter by account type
+router.get('/account-type',getAccountType);
 module.exports = router;
 
 //FOR TESTING: localhost:3000/users/get-single-uesr, localhost:3000/users/get-users, etc.

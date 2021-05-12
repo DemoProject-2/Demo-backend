@@ -2,7 +2,7 @@
 exports.up = function(knex) {
   return knex.schema.createTable('patients', function(table){
     table.integer('patient_id').unsigned().notNullable()
-    table.foreign('patient_id')
+    table.foreign('user_id')
       .references('id')
       .inTable('users')
       .onDelete('CASCADE')
