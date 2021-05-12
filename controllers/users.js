@@ -14,18 +14,18 @@ async function getAllUsers(req,res){
     }
 }
 
-//get user by username
+//get user by username TODO: test/change
 async function getUserByName(req,res) {
     const query = req.params.query
     try{
         const results = await db.any(`SELECT * FROM users WHERE lower(user_name) LIKE '%${query.toLowerCase()}%';`)
         return res.status(200).json(results)
     }catch(err){
-        res.json(err.message)
+        res.status(200).json(err.message)
     }
 }
 
-//get a single user from table
+//get a single user from table, now works
 async function getAUser(req,res){
     const id=parseInt(req.params.id,10)
     try {
@@ -36,26 +36,34 @@ async function getAUser(req,res){
     }
 }
 
-//update a user not added to routes yet
-async function updateUser(req,res){
-    const userID=parseInt(req.params.id,10)
-    try{
-        await db.none(`UPDATE users SET first_name=$1, last_name=$2, user_name=$3, email=$4, password=$5, medical_issue=$6, account_type=$7`,[
-            req.body.first_name,
-            req.body.last_name,
-            req.body.user_name,
-            req.body.email,
-            req.body.password,
-            req.body.medical_issue,
-            req.body.account_type,
-            userID
-        ])
-    return res.json({
-        message:success
-    })
+//get users by the a certain issue
+async function getUsersByIssue(req, res) {
+    const issue=req.params.issue;
+    try {
+        const specialists = await db.any(`SELECT * FROM users WHERE medical_issue = $1`, issue);
+        return res.status(200).json(specialists);
+    } catch (err) {
+        res.send(err);
     }
-    catch(err){
-        res.status(500).send(err)
+}
+
+async function getAllSpecialists(req, res) {
+    const userType = req.params.userType;
+    try {
+        const specialists = await db.any(`SELECT * FROM users WHERE account_type = $1`, userType);
+        return res.json(specialists);
+    } catch (err) {
+        res.send(err);
+    }
+}
+
+async function getAllPatients(req, res) {
+    const userType = req.params.userType;
+    try {
+        const patients = await db.any(`SELECT * FROM users WHERE account_type = $1`, userType);
+        return res.json(patients);
+    } catch (err) {
+        res.send(err);
     }
 }
 
@@ -173,4 +181,5 @@ module.exports = {
     getAccountType,
     getAllSpecialists,
     getAllPatients,
+    getUsersByIssue
 };
