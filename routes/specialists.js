@@ -6,7 +6,7 @@ const {
   getSpecialistByName,
   getSpecialistsBySpecialty,
   specialistSignUp
-} = require("../controllers/specialists")
+} = require("../controllers/Specialists")
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
