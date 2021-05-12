@@ -10,18 +10,6 @@ async function getAllSpecialists(req, res) {
 
 //get a specialist matching id completed
 async function getSpecialistsById(req,res){
-    const id=parseInt(res["specialist_id"],10)
-    try{
-        const specialist = await db.none(`SELECT specialists.specialist_id, users.first_name, users.last_name, users.medical_issue FROM specialists, users WHERE users.id=${id} AND specialists.specialists_id=${id}`)
-        return res.json(specialist)
-    }catch(err){
-        return res.status(500).json({message: err.message})
-    }
-}
-
-//specialistInfo redundant? (same as getSpecialistById?)
-//get specialist info
-async function SpecialistInfo(req,res){
     const specialistID=req.body["specialist_id"] ? parseInt(req.body["specialist_id"],10) : parseInt(req.params["specialist_id"])
     try{
         const specialist= await db.one(`SELECT * FROM specialists where id=$1`,

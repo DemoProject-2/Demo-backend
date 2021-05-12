@@ -36,8 +36,31 @@ async function getAUser(req,res){
     }
 }
 
+
+//update a user not added to routes yet
+async function updateUser(req,res){
+    const userID=parseInt(req.params.id,10)
+    try{
+        await db.none(`UPDATE users SET first_name=$1, last_name=$2, user_name=$3, email=$4, password=$5, medical_issue=$6, account_type=$7`,[
+            req.body.first_name,
+            req.body.last_name,
+            req.body.user_name,
+            req.body.email,
+            req.body.password,
+            req.body.medical_issue,
+            req.body.account_type,
+            userID
+        ])
+    return res.json({
+        message:success
+    })
+    }
+    catch(err){
+        res.status(500).send(err)
+    }
+}
 //create one user and add to table not added to routes yet
-async function createUser(req,res){
+async function registerUser(req,res){
     let user=req.body
     let hashedPassword;
     const rounds=10
