@@ -13,7 +13,7 @@ const {
     getAllPatients,
     getUsersByIssue
 } = require("../controllers/users");
-const { get } = require('./patients');
+// const { get } = require('./patients');
 
 // router.post('/sign-in', async function (req,res){
 //     try{

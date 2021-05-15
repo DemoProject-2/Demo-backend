@@ -3,10 +3,10 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
-//var indexRouter = require('./routes/index');
+// var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-var specialistsRouter = require('./routes/specialists');
-var patientsRouter = require('./routes/patients');
+// var specialistsRouter = require('./routes/specialists');
+// var patientsRouter = require('./routes/patients');
 
 var app = express();
 
@@ -18,7 +18,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.use('/patients', patientsRouter);
-app.use('/specialists', specialistsRouter);
+// app.use('/patients', patientsRouter);
+// app.use('/specialists', specialistsRouter);
+
+app.get('/', async (req, res) => {
+    console.log("you are here, headers:", req.headers);
+});
 
 module.exports = app;
