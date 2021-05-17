@@ -145,13 +145,23 @@ async function deleteUser(req,res) {
 // }
 //select a specific type of user
 async function getAccountType(req,res){
-    const accountType=JSON.stringify(req.params.account_type)
-    try{
-        const userTypes = await db.any(`SELECT * FROM users WHERE account_type=$1`,
-        accountType)
-        return res.json(userTypes)
-    } catch (err) {
-        res.send(err)
+    const accountType=JSON.stringify(req.params.account_type);
+    if(accountType === 'Specialist'){
+        try{
+            const userTypes = await db.any(`SELECT * FROM users WHERE account_type=$1`,
+            'specialist')
+            return res.json(userTypes)
+        } catch (err) {
+            res.send(err)
+        }
+    }else if(accountType === "User"){
+        try{
+            const userTypes = await db.any(`SELECT * FROM users WHERE account_type=$1`,
+            'patient')
+            return res.json(userTypes)
+        } catch (err) {
+            res.send(err)
+        }
     }
 }
 //SPECIALIST TABLE CONTROLLERS
