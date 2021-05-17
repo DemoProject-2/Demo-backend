@@ -58,6 +58,8 @@ router.get('/username', getUserByName);
 router.get('/all-specialist/:userType', getAllSpecialists); //http://localhost:3000/users/all-specialist/specialist
 //get all patients
 router.get('/all-patients/:userType', getAllPatients); //http://localhost:3000/users/all-patients/patient
+//get accout by type
+router.get('/get-account-type/:account_type', getAccountType);
 //get Users by the issue they deal with
 router.get('/specialty-users/:issue', getUsersByIssue); //http://localhost:3000/users/specialty-patients/Depression
 module.exports = router;
