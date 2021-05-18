@@ -18,10 +18,23 @@ async function getAllUsers(req,res){
 async function getUserByName(req,res) {
     const query = req.params.query
     try{
-        const results = await db.any(`SELECT * FROM users WHERE lower(user_name) LIKE '%${query.toLowerCase()}%';`)
-        return res.status(200).json(results)
+        // const results = await db.any(`SELECT * FROM users WHERE lower(user_name) LIKE '%${query.toLowerCase()}%';`)
+        const results = await db.any(`SELECT * FROM users WHERE user_name = $1`, query)
+        return res.json(results)
     }catch(err){
-        res.status(200).json(err.message)
+        res.json(err.message)
+    }
+}
+
+//get the username and password, returns the username
+async function getUserAccountInfo(req,res){
+    const userName = req.params.userName;
+    const passphrase= req.params.password;
+    try {
+        const user = await db.any(`SELECT * FROM users WHERE users.user_name = ${userName} AND users.password = ${passphrase}`);
+        return res.json(user);
+    } catch (err) {
+        res.send(err);
     }
 }
 
@@ -145,13 +158,23 @@ async function deleteUser(req,res) {
 // }
 //select a specific type of user
 async function getAccountType(req,res){
-    const accountType=JSON.stringify(req.params.account_type)
-    try{
-        const userTypes = await db.any(`SELECT * FROM users WHERE account_type=$1`,
-        accountType)
-        return res.json(userTypes)
-    } catch (err) {
-        res.send(err)
+    const accountType=JSON.stringify(req.params.account_type);
+    if(accountType === 'Specialist'){
+        try{
+            const userTypes = await db.any(`SELECT * FROM users WHERE account_type=$1`,
+            'specialist')
+            return res.json(userTypes)
+        } catch (err) {
+            res.send(err)
+        }
+    }else if(accountType === "User"){
+        try{
+            const userTypes = await db.any(`SELECT * FROM users WHERE account_type=$1`,
+            'patient')
+            return res.json(userTypes)
+        } catch (err) {
+            res.send(err)
+        }
     }
 }
 //sign in user from username and password then create token
@@ -194,5 +217,6 @@ module.exports = {
     getAccountType,
     getAllSpecialists,
     getAllPatients,
-    getUsersByIssue
+    getUsersByIssue,
+    getUserAccountInfo
 };
