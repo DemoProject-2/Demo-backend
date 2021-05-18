@@ -25,6 +25,18 @@ async function getUserByName(req,res) {
     }
 }
 
+//get the username and password, returns the username
+async function getUserAccountInfo(req,res){
+    const userName = req.params.userName;
+    const passphrase= req.params.password;
+    try {
+        const user = await db.any(`SELECT * FROM users WHERE users.user_name = ${userName} AND users.password = ${passphrase}`);
+        return res.json(user);
+    } catch (err) {
+        res.send(err);
+    }
+}
+
 //get a single user from table, now works
 async function getAUser(req,res){
     const id=parseInt(req.params.id,10)
@@ -191,5 +203,6 @@ module.exports = {
     getAccountType,
     getAllSpecialists,
     getAllPatients,
-    getUsersByIssue
+    getUsersByIssue,
+    getUserAccountInfo
 };
