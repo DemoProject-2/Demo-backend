@@ -1,7 +1,7 @@
 require("dotenv").config();
 const db = require("../db")
-// const bcrypt=require("bcrypt")
-// const {generateToken} =  require("../middleware/users-auth")
+const bcrypt=require("bcrypt")
+const {generateToken} =  require('../middleware/user_auth')
 //USER TABLE CONTROLLERS  
 //get all users from database
 async function getAllUsers(req,res){
@@ -26,12 +26,12 @@ async function getUserByName(req,res) {
     }
 }
 
-//get the username and password, returns the username
-async function getUserAccountInfo(req,res){
-    const userName = req.params.userName;
-    const passphrase= req.params.password;
+//get the username and password, returns the username  user sign in function
+async function getUserAccountInfo(req,res){ 
+    const username = req.params.userName;
+    const password= req.params.password;
     try {
-        const user = await db.any(`SELECT * FROM users WHERE users.user_name = ${userName} AND users.password = ${passphrase}`);
+        const user = await db.one(`SELECT * FROM users WHERE users.user_name = ${username} AND users.password = ${password}`);
         return res.json(user);
     } catch (err) {
         res.send(err);
@@ -81,39 +81,40 @@ async function getAllPatients(req, res) {
 }
 
 //create one user and add to table not added to routes yet
-// async function registerUser(req,res){
-//     let user=req.body
-//     let hashedPassword;
-//     const rounds=10
-//     console.log('created user, ',user)
-//     if(!user){
-//         return res.status(400).json({
-//             message:"Account Information Invalid"
-//         })
-//     }
-//     try{
-//         hashedPassword = await bcrypt.hash(user.password, rounds)
-//         user["password"]=hashedPassword
-//     }catch{
-//         return res.status(401).json({
-//             message: "Invalid Password",
-//             error: err.message
-//         })
-//     }
-//     let token;
-//     try{
-//         await db.none(`INSERT INTO users (first_name, last_name, user_name, email, password, medical_issue, account_type) VALUES (${first_name}, ${last_name}, ${user_name}, ${email}, ${password}, ${medical_issue}, ${account_type})`,
-//         user
-//         )
-//         const userID = await db.one(`SELECT id, account_type FROM users WHERE user_name=${user_name}`, user)
-//         token=await generateToken(userID)
-//     }catch(err){
-//         console.log(`ERROR CAUGHT : ${err.message}`)
-//         return res.status(400).send(err)
-//     }
-//     return res.status(201).json({token})
+async function registerUser(req,res){
+    let user=req.body
+    let hashedPassword;
+    const rounds=10
+    console.log('created user, ',user)
+    if(!user){
+        return res.status(400).json({
+            message:"Account Information Invalid"
+        })
+    }
+    try{
+        hashedPassword = await bcrypt.hash(user.password, rounds)
+        user["password"]=hashedPassword
+    }catch{
+        return res.status(401).json({
+            message: "Invalid Password",
+            error: err.message
+        })
+    }
+    let token;
+    try{
+        await db.none(`INSERT INTO users (first_name, last_name, user_name, email, password, medical_issue, account_type) VALUES (${first_name}, ${last_name}, ${user_name}, ${email}, ${password}, ${medical_issue}, ${account_type})`,
+        user
+        )
+        const userID = await db.one(`SELECT id, account_type FROM users WHERE user_name=${user_name}`, user)
+        token=await generateToken(userID)
+    }catch(err){
+        console.log(`ERROR CAUGHT : ${err.message}`)
+        return res.status(400).send(err)
+    }
+    return res.status(201).json({token})
 
-// }
+}
+
 
 //delete a user from database not yet added to routes
 async function deleteUser(req,res) {
@@ -129,33 +130,36 @@ async function deleteUser(req,res) {
 }
 
 //login user not yet added to routes
-// async function userLogin(req,res){
-//     const{password}=req.body
-//     const {exists} = await db.one(`SELECT EXISTS(SELECT * FROM users WHERE user_name=${user_name})`,req.body)
-//     let user;
-//     if(!exists){
-//         return res.status(404).json({
-//             message: "User Not Found"
-//         })
-//     } else {
-//         user = await db.one(`SELECT * FROM users WHERE user_name=${user_name}`, req.body)
-//         console.log(user)
-//     }
-//     let match;
-//     try{
-//         match=await bcrypt.compare(password, user.password)
-//         if(!match){
-//             return res.status(401).json({
-//                 message: "Invalid Credentials"
-//             })
-//         }else{
-//             const token = await generateToken(user)
-//             return res.status(202).json({"token":token})
-//         }
-//     } catch(err){
-//         return res.status(400).json(err.message)
-//     }
-// }
+async function userLogin(req,res){
+    const{password}=req.body
+    const {exists} = await db.one(`SELECT EXISTS(SELECT * FROM users WHERE user_name=${user_name})`,req.body)
+    let user;
+    if(!exists){
+        return res.status(404).json({
+            message: "User Not Found"
+        })
+    } else {
+        user = await db.one(`SELECT * FROM users WHERE user_name=${user_name}`, req.body)
+        console.log(user)
+    }
+    let match;
+    try{
+        match=await bcrypt.compare(password, user.password)
+        if(!match){
+            return res.status(401).json({
+                message: "Invalid Credentials"
+            })
+        }else{
+            const token = await generateToken(user)
+            return res.status(202).json({"token":token})
+        }
+    } catch(err){
+        return res.status(400).json(err.message)
+    }
+}
+
+
+
 //select a specific type of user
 async function getAccountType(req,res){
     const accountType=JSON.stringify(req.params.account_type);
@@ -177,19 +181,8 @@ async function getAccountType(req,res){
         }
     }
 }
-//sign in user from username and password then create token
-async function signInUser(){
-    const userName=JSON.stringify(req.params.user_name)
-    const passWord=JSON.stringify(req.params,password)
-    try{
-        const user = await db.one(`SELECT * FROM users WHERE user_name=$1, password=$2`,
-        userName,
-        passWord)
-        return res.json(user)
-    }catch(err){
-        res.send(err)
-    }
-}
+
+
 //SPECIALIST TABLE CONTROLLERS
 async function getAllSpecialists(req, res) {
     try {
@@ -218,5 +211,7 @@ module.exports = {
     getAllSpecialists,
     getAllPatients,
     getUsersByIssue,
-    getUserAccountInfo
+    getUserAccountInfo,
+    registerUser,
+    userLogin
 };
