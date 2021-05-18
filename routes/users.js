@@ -62,6 +62,8 @@ router.get('/all-patients/:userType', getAllPatients); //http://localhost:3000/u
 router.get('/get-account-type/:account_type', getAccountType);
 //get Users by the issue they deal with
 router.get('/specialty-users/:issue', getUsersByIssue); //http://localhost:3000/users/specialty-patients/Depression
+//get username and password
+router.get('/:userName/:password', getUserAccountInfo);
 module.exports = router;
 
 //FOR TESTING: localhost:3000/users/get-single-uesr, localhost:3000/users/get-users, etc.
