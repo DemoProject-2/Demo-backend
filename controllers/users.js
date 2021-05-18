@@ -14,11 +14,11 @@ async function getAllUsers(req,res){
     }
 }
 
-//get user by username TODO: test/change
+//get user by username
 async function getUserByName(req,res) {
-    const query = req.params.query
+    const query = req.params.userName;
     try{
-        const results = await db.any(`SELECT * FROM users WHERE lower(user_name) LIKE '%${query.toLowerCase()}%';`)
+        const results = await db.any(`SELECT * FROM users WHERE user_name = ${query}`)
         return res.status(200).json(results)
     }catch(err){
         res.status(200).json(err.message)
