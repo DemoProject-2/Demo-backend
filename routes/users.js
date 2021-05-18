@@ -11,7 +11,8 @@ const {
     getAccountType,
     getAllSpecialists,
     getAllPatients,
-    getUsersByIssue
+    getUsersByIssue,
+    getUserAccountInfo
 } = require("../controllers/users");
 // const { get } = require('./patients');
 
