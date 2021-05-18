@@ -50,16 +50,25 @@ router.use((req, res, next) => {
   });
 //get a user
 router.get('/user/:id', getAUser);
+
 //get all users
 router.get('/all-users', getAllUsers);
+
 //get single user by name
 router.get('/username', getUserByName);
+
 //get all specialists
 router.get('/all-specialist/:userType', getAllSpecialists); //http://localhost:3000/users/all-specialist/specialist
+
 //get all patients
 router.get('/all-patients/:userType', getAllPatients); //http://localhost:3000/users/all-patients/patient
+
 //get Users by the issue they deal with
 router.get('/specialty-users/:issue', getUsersByIssue); //http://localhost:3000/users/specialty-patients/Depression
+
+
+//get users by username and password
+router.get('/:username/:password', signInUser)
 module.exports = router;
 
 //FOR TESTING: localhost:3000/users/get-single-uesr, localhost:3000/users/get-users, etc.

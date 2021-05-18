@@ -154,6 +154,19 @@ async function getAccountType(req,res){
         res.send(err)
     }
 }
+//sign in user from username and password then create token
+async function signInUser(){
+    const userName=JSON.stringify(req.params.user_name)
+    const passWord=JSON.stringify(req.params,password)
+    try{
+        const user = await db.one(`SELECT * FROM users WHERE user_name=$1, password=$2`,
+        userName,
+        passWord)
+        return res.json(user)
+    }catch(err){
+        res.send(err)
+    }
+}
 //SPECIALIST TABLE CONTROLLERS
 async function getAllSpecialists(req, res) {
     try {
