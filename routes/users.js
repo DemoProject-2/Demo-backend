@@ -54,7 +54,7 @@ router.get('/user/:id', getAUser);
 //get all users
 router.get('/all-users', getAllUsers);
 //get single user by name
-router.get('/username', getUserByName);
+router.get('/username/:userName', getUserByName);
 //get all specialists
 router.get('/all-specialist/:userType', getAllSpecialists); //http://localhost:3000/users/all-specialist/specialist
 //get all patients
