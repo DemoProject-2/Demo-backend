@@ -2,7 +2,7 @@ const express = require('express')
 //const db = require("../seeds/seed_users")
 const router = new express.Router()
 // const verifyToken = require('../middleware/verifytoken')
-// const bcrypt = require('bcrypt')
+const bcrypt = require('bcrypt')
 // const jwt = require('jsonwebtoken')
 const {
     getAUser,

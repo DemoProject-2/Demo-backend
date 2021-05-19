@@ -1,6 +1,7 @@
 require("dotenv").config();
 const db = require("../db")
 const bcrypt=require("bcrypt")
+// const jwt = require('jsonwebtoken')
 const {generateToken} =  require('../middleware/user_auth')
 //USER TABLE CONTROLLERS  
 //get all users from database
