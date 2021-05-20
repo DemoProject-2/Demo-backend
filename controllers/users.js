@@ -95,7 +95,7 @@ async function registerUser(req,res){
     try{
         hashedPassword = await bcrypt.hash(user.password, rounds)
         user["password"]=hashedPassword
-    }catch{
+    }catch(err){
         return res.status(401).json({
             message: "Invalid Password",
             error: err.message
@@ -103,10 +103,11 @@ async function registerUser(req,res){
     }
     let token;
     try{
-        await db.none(`INSERT INTO users (first_name, last_name, user_name, email, password, medical_issue, account_type) VALUES (${first_name}, ${last_name}, ${user_name}, ${email}, ${password}, ${medical_issue}, ${account_type})`,
+        await db.none(`INSERT INTO users (first_name, last_name, user_name, email, password, medical_issue, account_type) VALUES (${user.first_name}, ${user.last_name}, ${user.user_name}, ${user.email}, ${user.password}, ${user.medical_issue}, ${user.account_type})`,
         user
         )
         const userID = await db.one(`SELECT id, account_type FROM users WHERE user_name=${user_name}`, user)
+        console.log("User Created: ", userID)
         token=await generateToken(userID)
     }catch(err){
         console.log(`ERROR CAUGHT : ${err.message}`)
