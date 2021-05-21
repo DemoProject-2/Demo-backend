@@ -13,10 +13,12 @@ const {
     getAllPatients,
     getUsersByIssue,
     getUserAccountInfo,
-    getSpecificSpecialist,
-    getPatientsByIssue,
     registerUser,
-    userLogin
+    userLogin,
+    getAccountByTypeAndUsername,
+    getAccountByIssueAndUsername,
+    getSpecificAccount,
+    getAccountByTypeAndIssue
 } = require("../controllers/users");
 // const { get } = require('./patients');
 
@@ -55,10 +57,8 @@ router.use((req, res, next) => {
   });
 //get a user
 router.get('/user/:id', getAUser);
-
 //get all users
 router.get('/all-users', getAllUsers);
-
 //get single user by name
 router.get('/username/:query', getUserByName);
 //get all specialists
@@ -71,18 +71,14 @@ router.get('/get-account-type/:account_type', getAccountType);
 //get Users by the issue they deal with
 router.get('/specialty-users/:issue', getUsersByIssue); //http://localhost:3000/users/specialty-patients/Depression
 
-//all following are to be tested
-//get patients with specific issues
-router.get('/patients/:issue', getPatientsByIssue);
-//get certain specialists
-router.get('/special/:issue', getSpecificSpecialist);
-//get users by account type and medical issue
-router.get('/:userType/:issue')
 //get users by account type and userName
-router.get('/:userType/:userName')
+router.get('/typeAndName', getAccountByTypeAndUsername);
+//get by account type and issue
+router.get('/typeAndIssue', getAccountByTypeAndIssue)
 //get users by medical issue and userName
-router.get('/:issue/:userName')
-
+router.get('/issueAndName', getAccountByIssueAndUsername);
+//get by account type, issue, and username
+router.get('/allFilters', getSpecificAccount)
 //get username and password
 router.get('/:username/:password', getUserAccountInfo); //usersign in route
 

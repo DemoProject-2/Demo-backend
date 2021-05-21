@@ -134,15 +134,15 @@ async function deleteUser(req,res) {
 
 //login user not yet added to routes
 async function userLogin(req,res){
-    const{password}=req.body
-    const {exists} = await db.one(`SELECT EXISTS(SELECT * FROM users WHERE user_name=${user_name})`,req.body)
+    const users=req.body;
+    const {exists} = await db.one(`SELECT EXISTS(SELECT * FROM users WHERE user_name = $1)`, users.user_name)
     let user;
     if(!exists){
         return res.status(404).json({
             message: "User Not Found"
         })
     } else {
-        user = await db.one(`SELECT * FROM users WHERE user_name=${user_name}`, req.body)
+        user = await db.one(`SELECT * FROM users WHERE user_name = $1 AND password = $2)`, [users.user_name, users.password])
         console.log(user)
     }
     let match;
@@ -205,28 +205,68 @@ async function getAllPatients(req, res) {
 }
 
 //get patients by the a certain issue
-async function getPatientsByIssue(req, res) {
-    const issue=req.params.issue;
-    //const account = req.params.accountType;
-    try {
-        const patient = await db.any(`SELECT * FROM users WHERE WHERE account_type = patient AND medical_issue = $1`, issue);
-        return res.json(patient);
-    } catch (err) {
-        res.send(err);
-    }
-}
+// async function getPatientsByIssue(req, res) {
+//     const issue=req.params.issue;
+//     //const account = req.params.accountType;
+//     try {
+//         const patient = await db.any(`SELECT * FROM users WHERE account_type = patient AND medical_issue = $1`, issue);
+//         return res.json(patient);
+//     } catch (err) {
+//         res.send(err);
+//     }
+// }
 
 //get specialist of specific issue, same logic as "get usersByIssue, but gives error", possibly something with the routes file
-async function getSpecificSpecialist(req, res) {
-    const issue=req.params.issue;
+// async function getSpecificSpecialist(req, res) {
+//     const issue=req.params.issue;
+//     try {
+//         const users = await db.any(`SELECT * FROM users WHERE account_type = specialist AND medical_issue = $1`, issue);
+//         return res.status(200).json(users);
+//     } catch (err) {
+//         res.send(err);
+//     }
+// }
+
+//get user by account by account_type by user_name
+async function getAccountByTypeAndUsername(req,res){
+    let info = req.body;
     try {
-        const users = await db.any(`SELECT * FROM users WHERE account_type = specialist AND medical_issue = $1`, issue);
-        return res.status(200).json(users);
+        const users = await db.any(`SELECT * FROM users WHERE account_type = $1 AND user_name = $2`, [info.account_type, info.user_name]);
+        return res.json(users);
     } catch (err) {
         res.send(err);
     }
 }
 
+async function getAccountByIssueAndUsername(req,res){
+    let info = req.body;
+    try {
+        const users = await db.any(`SELECT * FROM users WHERE medical_issue = $1 AND user_name = $2`, [info.medical_issue, info.user_name]);
+        return res.json(users);
+    } catch (err) {
+        res.send(err);
+    }
+}
+
+async function getSpecificAccount(req,res){
+    let info = req.body;
+    try {
+        const users = await db.any(`SELECT * FROM users WHERE medical_issue = $1 AND user_name = $2 AND account_type = $3`, [info.medical_issue, info.user_name, info.account_type]);
+        return res.json(users);
+    } catch (err) {
+        res.send(err);
+    }
+}
+
+async function getAccountByTypeAndIssue(req,res){
+    let info = req.body;
+    try {
+        const users = await db.any(`SELECT * FROM users WHERE medical_issue = $1 AND account_type = $2`, [info.medical_issue, info.account_type]);
+        return res.json(users);
+    } catch (err) {
+        res.send(err);
+    }
+}
 module.exports = {
     getAUser,
     getAllUsers,
@@ -236,8 +276,12 @@ module.exports = {
     getAllPatients,
     getUsersByIssue,
     getUserAccountInfo,
-    getSpecificSpecialist,
-    getPatientsByIssue,
+    // getSpecificSpecialist,
+    // getPatientsByIssue,
     registerUser,
-    userLogin
+    userLogin,
+    getAccountByTypeAndUsername,
+    getAccountByIssueAndUsername,
+    getSpecificAccount,
+    getAccountByTypeAndIssue
 };
