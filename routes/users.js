@@ -13,6 +13,8 @@ const {
     getAllPatients,
     getUsersByIssue,
     getUserAccountInfo,
+    getSpecificSpecialist,
+    getPatientsByIssue,
     registerUser,
     userLogin
 } = require("../controllers/users");
@@ -68,6 +70,18 @@ router.get('/all-patients/:userType', getAllPatients); //http://localhost:3000/u
 router.get('/get-account-type/:account_type', getAccountType);
 //get Users by the issue they deal with
 router.get('/specialty-users/:issue', getUsersByIssue); //http://localhost:3000/users/specialty-patients/Depression
+
+//all following are to be tested
+//get patients with specific issues
+router.get('/patients/:issue', getPatientsByIssue);
+//get certain specialists
+router.get('/special/:issue', getSpecificSpecialist);
+//get users by account type and medical issue
+router.get('/:userType/:issue')
+//get users by account type and userName
+router.get('/:userType/:userName')
+//get users by medical issue and userName
+router.get('/:issue/:userName')
 
 //get username and password
 router.get('/:username/:password', getUserAccountInfo); //usersign in route

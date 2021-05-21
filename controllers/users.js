@@ -86,7 +86,7 @@ async function registerUser(req,res){
     let user=req.body
     let hashedPassword;
     const rounds=10
-    console.log('created user, ',user)
+    // console.log('created user, ',user)
     if(!user){
         return res.status(400).json({
             message:"Account Information Invalid"
@@ -94,7 +94,7 @@ async function registerUser(req,res){
     }
     try{
         hashedPassword = await bcrypt.hash(user.password, rounds)
-        user["password"]=hashedPassword
+        user.password=hashedPassword
     }catch(err){
         return res.status(401).json({
             message: "Invalid Password",
@@ -103,17 +103,18 @@ async function registerUser(req,res){
     }
     let token;
     try{
-        await db.none(`INSERT INTO users (first_name, last_name, user_name, email, password, medical_issue, account_type) VALUES (${user.first_name}, ${user.last_name}, ${user.user_name}, ${user.email}, ${user.password}, ${user.medical_issue}, ${user.account_type})`,
-        user
+        console.log(user.password)
+        await db.none('INSERT INTO users (first_name, last_name, user_name, email, password, medical_issue, account_type) VALUES ($1, $2, $3, $4, $5, $6, $7)',
+        [user.first_name, user.last_name, user.user_name, user.email, user.password, user.medical_issue, user.account_type]
         )
-        const userID = await db.one(`SELECT id, account_type FROM users WHERE user_name=${user_name}`, user)
-        console.log("User Created: ", userID)
-        token=await generateToken(userID)
+        // const userID = await db.one(`SELECT id, account_type FROM users WHERE user_name=${user_name}`, user)
+        // console.log("User Created: ", userID)
+        token=await generateToken(1)
+        return res.status(201).json({token})
     }catch(err){
         console.log(`ERROR CAUGHT : ${err.message}`)
-        return res.status(400).send(err)
+        return res.status(400).json({error: err.message})
     }
-    return res.status(201).json({token})
 
 }
 
@@ -160,8 +161,6 @@ async function userLogin(req,res){
     }
 }
 
-
-
 //select a specific type of user
 async function getAccountType(req,res){
     const accountType=JSON.stringify(req.params.account_type);
@@ -205,6 +204,29 @@ async function getAllPatients(req, res) {
     }
 }
 
+//get patients by the a certain issue
+async function getPatientsByIssue(req, res) {
+    const issue=req.params.issue;
+    //const account = req.params.accountType;
+    try {
+        const patient = await db.any(`SELECT * FROM users WHERE WHERE account_type = patient AND medical_issue = $1`, issue);
+        return res.json(patient);
+    } catch (err) {
+        res.send(err);
+    }
+}
+
+//get specialist of specific issue, same logic as "get usersByIssue, but gives error", possibly something with the routes file
+async function getSpecificSpecialist(req, res) {
+    const issue=req.params.issue;
+    try {
+        const users = await db.any(`SELECT * FROM users WHERE account_type = specialist AND medical_issue = $1`, issue);
+        return res.status(200).json(users);
+    } catch (err) {
+        res.send(err);
+    }
+}
+
 module.exports = {
     getAUser,
     getAllUsers,
@@ -214,6 +236,8 @@ module.exports = {
     getAllPatients,
     getUsersByIssue,
     getUserAccountInfo,
+    getSpecificSpecialist,
+    getPatientsByIssue,
     registerUser,
     userLogin
 };
