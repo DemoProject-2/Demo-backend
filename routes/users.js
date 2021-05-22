@@ -5,20 +5,20 @@ const router = new express.Router()
 const bcrypt = require('bcrypt')
 // const jwt = require('jsonwebtoken')
 const {
-    getAUser,
-    getAllUsers,
-    getUserByName,
-    getAccountType,
-    getAllSpecialists,
-    getAllPatients,
-    getUsersByIssue,
-    getUserAccountInfo,
-    registerUser,
-    userLogin,
-    getAccountByTypeAndUsername,
-    getAccountByIssueAndUsername,
-    getSpecificAccount,
-    getAccountByTypeAndIssue
+  getAUser,
+  getAllUsers,
+  getUserByName,
+  getAccountType,
+  getAllSpecialists,
+  getAllPatients,
+  getUsersByIssue,
+  getUserAccountInfo,
+  registerUser,
+  userLogin,
+  getAccountByTypeAndUsername,
+  getAccountByIssueAndUsername,
+  getSpecificAccount,
+  getAccountByTypeAndIssue
 } = require("../controllers/users");
 // const { get } = require('./patients');
 
@@ -52,9 +52,9 @@ const {
 // })
 router.use(express.json());
 router.use((req, res, next) => {
-    console.log("users router");
-    next();
-  });
+  console.log("users router");
+  next();
+});
 //get a user
 router.get('/user/:id', getAUser);
 //get all users
@@ -81,11 +81,6 @@ router.get('/issueAndName', getAccountByIssueAndUsername);
 router.get('/allFilters', getSpecificAccount)
 //get username and password
 router.get('/:username/:password', getUserAccountInfo); //usersign in route
-
-router.post("/register",registerUser)//register  new user
-
-router.post("/sign-in",userLogin) //login user
-
 
 module.exports = router;
 
