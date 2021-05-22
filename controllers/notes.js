@@ -23,10 +23,10 @@ async function getUserNotes(req, res) {
 
 //get specific note by id
 async function getSpecificNote(req, res) {
-    const noteID=parseInt(req.params.notes_id)
+    const noteInfo = req.body;
     try{
         const notes = await db.one(`SELECT * FROM notes WHERE notes_id=$1`,
-        noteID)
+        noteInfo.noteID)
         return res.json(notes)
     } catch (err) {
         res.status(500).send(err)
@@ -35,9 +35,10 @@ async function getSpecificNote(req, res) {
 
 //create a note
 async function createNote(req, res) {
+    const noteInfo = req.body;
     try{
-        await db.none(`INSERT INTO notes (content, user_id) VALUES (${content},${user_id})`,
-        req.body)
+        await db.none(`INSERT INTO notes (content, user_id) VALUES ($1,$2)`,
+        [noteInfo.content, noteInfo.user_id])
         return res.json({
             message:'success'
         })
@@ -49,10 +50,10 @@ async function createNote(req, res) {
 
 //delete a note
 async function deleteNote(req,res){
-    const noteID=parseInt(req.params.notes_id)
+    const noteInfo = req.body;
     try{
         await db.none(`DELETE FROM notes WHERE notes_id=$1`,
-        noteID)
+        noteInfo.noteID)
         return res.json({
             message:'success'
         })
@@ -63,11 +64,10 @@ async function deleteNote(req,res){
 
 //update a note
 async function updateNote(req, res) {
-    const noteID=parseInt(req.params.notes_id)
+    const noteInfo=req.body;
     try {
         await db.none(`UPDATE users SET content=$1 WHERE notes_id=$2`,
-        req.body.content,
-        noteID)
+        [noteInfo.content,noteInfo.noteID])
         return res.json({
             message:'success'
         })
