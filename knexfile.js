@@ -1,23 +1,25 @@
 // Update with your config settings.
+require('dotenv').config()
 
 module.exports = {
 
   development: {
     client: 'postgresql',
     connection: {
-      database: 'bookLibrary',
-      user: 'Ian',
-      password: '1#531Tob'
+      database: process.env.database,
+      user: process.env.databaseUsername,
+      password: process.env.databasePassword
     },
   },
 
   staging: {
     client: 'postgresql',
-    connection: {
-      database: 'MentalHealthcare',
-      user:     'Ian',
-      password: '1#531Tob'
-    },
+    connection: process.env.DATABASE_URL,
+//     {
+//       database: process.env.database,
+//       user: process.env.databaseUsername,
+//       password: process.env.databasePassword
+//     },
     pool: {
       min: 2,
       max: 10
@@ -29,11 +31,12 @@ module.exports = {
 
   production: {
     client: 'postgresql',
-    connection: {
-      database: 'my_db',
-      user:     'username',
-      password: 'password'
-    },
+    connection: process.env.DATABASE_URL,
+//     {
+//       database: process.env.database,
+//       user: process.env.databaseUsername,
+//       password: process.env.DatabasePassword
+//     },
     pool: {
       min: 2,
       max: 10
