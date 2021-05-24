@@ -11,13 +11,16 @@ async function getAllNotes(req, res) {
 
 // //get all notes for a specific user
 async function getUserNotes(req, res) {
-    const userID=parseInt(req.params.user_id,10)
-    try{
-        const notes=await db.any(`SELECT * FROM notes WHERE user_id=$1`,
-        userID)
-        return res.json(notes)
-    } catch(err){
-        res.status(500).send(err)
+    const userId = parseInt(req.user_id, 10)
+
+    try {
+        const notes = await db.any(`SELECT * FROM notes WHERE user_id = $1`, [userId])
+        
+        return res.json({ notes })
+    } catch(err) {
+        res.status(500).json({
+            message: err.message
+        })
     }
 }
 
@@ -27,7 +30,7 @@ async function getSpecificNote(req, res) {
     try{
         const notes = await db.one(`SELECT * FROM notes WHERE notes_id=$1`,
         noteInfo.noteID)
-        return res.json(notes)
+        return res.json({ notes })
     } catch (err) {
         res.status(500).send(err)
     }
@@ -36,14 +39,15 @@ async function getSpecificNote(req, res) {
 //create a note
 async function createNote(req, res) {
     const noteInfo = req.body;
+
     try{
-        await db.none(`INSERT INTO notes (content, user_id) VALUES ($1,$2)`,
-        [noteInfo.content, noteInfo.user_id])
-        return res.json({
-            message:'success'
-        })
+        const note = await db.one(`INSERT INTO notes (content, user_id) VALUES ($1,$2) returning *`, [noteInfo.content, req.user_id])
+       
+        return res.json({ note })
     } catch (err){
-        res.status(500).send(err)
+        res.status(500).json({
+            message: err.message
+        })
     }
 }
 

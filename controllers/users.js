@@ -5,7 +5,6 @@ const db = require("../db")
 async function getAllUsers(req, res) {
     try {
         const users = await db.any(`SELECT * FROM users`)
-        console.log(users)
         return res.json(users)
     } catch (err) {
         res.send(err)

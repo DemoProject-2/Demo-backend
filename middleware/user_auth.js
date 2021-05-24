@@ -16,7 +16,7 @@ async function generateToken (user) {
         }
     );
 
-    console.log(`Token: ${token}`);
+    // console.log(`Token: ${token}`);
 
     return token;
 }
@@ -40,24 +40,20 @@ async function authorize (req, res, next) {
 
     const token = req.headers.authorization.split(" ")[1]
 
-    console.log(token)
-
     let decoded;
 
     try {
         decoded = await jwt.verify(token, secret);
     } catch (err) {
-        console.log('code')
-        return res.status(401).json({
+        return res.status(500).json({
             message: err.message
         })
     }
 
     if (decoded) {
-        req["user_id"] = decoded["user_id"];
-        res["user_id"] = decoded["user_id"];
-        console.log("req user id: ", req["user_id"])
-        console.log("res user id: ", res["user_id"])
+        req.user_id = decoded.user_id;
+        req.acct_type = decoded.acct_type;
+
         next();
     }
 }
