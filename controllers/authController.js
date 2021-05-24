@@ -49,7 +49,7 @@ async function register(req, res) {
         hashedPassword = await bcrypt.hash(user.password, rounds)
         user.password = hashedPassword
     } catch (err) {
-        return res.status(401).json({
+        return res.json({
             message: "Invalid Password",
             error: err.message
         })
