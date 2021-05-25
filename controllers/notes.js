@@ -41,7 +41,7 @@ async function createNote(req, res) {
     const noteInfo = req.body;
 
     try{
-        const note = await db.one(`INSERT INTO notes (content, user_id) VALUES ($1,$2) returning *`, [noteInfo.content, req.user_id])
+        const note = await db.one(`INSERT INTO notes (title, content, note_type, user_id) VALUES ($1,$2,$3,$4) returning *`, [noteInfo.title, noteInfo.content, noteInfo.note_type, req.user_id])
        
         return res.json({ note })
     } catch (err){
@@ -51,6 +51,18 @@ async function createNote(req, res) {
     }
 }
 
+//get specific note by note_type
+async function getAppointmentReminders(req, res) {
+    try{
+        const notes = await db.any(`SELECT * FROM notes WHERE note_type = 'Appointment_Reminder' AND user_id = $1`, [req.user_id])
+        return res.json({ notes })
+    } catch (err) {
+        console.log(err.message)
+        res.status(500).json({
+            message: err.message
+        })
+    }
+}
 
 //delete a note
 async function deleteNote(req,res){
@@ -87,4 +99,5 @@ module.exports = {
     createNote,
     deleteNote,
     updateNote,
+    getAppointmentReminders
 }
