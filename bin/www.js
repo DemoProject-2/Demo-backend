@@ -8,9 +8,10 @@ var app = require('../app');
 var debug = require('debug')('new-folder:server');
 var http = require('http');
 var server = http.createServer(app);
+const url = process.env.NODE_ENV === 'production' ? 'https://mental-health-database.herokuapp.com/' : 'http://localhost:3000'
 const io = require('socket.io')(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: url,
     methods: ["GET", "POST"]
   }
 });

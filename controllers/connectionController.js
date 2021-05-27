@@ -1,3 +1,4 @@
+const { func } = require('../db');
 const db=require('../db')
 
 async function getAllConnections(req, res) {
@@ -46,8 +47,22 @@ async function setConnection(req, res) {
     }
 }
 
+async function deleteConnection(req,res){
+    const patientId = req.params.patientId;
+    const specialistId = req.params.specialistId;
+    try{
+        const notes=await db.none(`DELETE FROM links WHERE patient_id =$1 specialist_id = $2`, [patientId, specialistId])
+        return res.json(notes)
+    }catch(err){
+        res.status(500).json({
+            message:err.message
+        })
+    }
+}
+
 module.exports = {
     getAllConnections,
     getAllUserConnections,
-    setConnection
+    setConnection,
+    deleteConnection
 }
