@@ -4,13 +4,12 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require("cors");
 const { authorize } = require('./middleware/user_auth')
-
 const authRouter = require('./routes/auth')
 const usersRouter = require('./routes/users');
 const connectionsRouter = require('./routes/connections');
 const notesRouter = require('./routes/notes')
-
 const app = express();
+require('socket.io')
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -23,5 +22,9 @@ app.use('/', authRouter);
 app.use('/users', usersRouter);
 app.use('/connections', connectionsRouter);
 app.use('/notes', [authorize], notesRouter);
+
+app.get('/', (req, res) => {
+  res.sendFile(__dirname + '/chatSocket'); //change to app.js instead of index.html?
+});
 
 module.exports = app;

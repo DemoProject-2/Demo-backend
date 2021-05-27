@@ -41,7 +41,8 @@ async function createNote(req, res) {
     const noteInfo = req.body;
 
     try{
-        const note = await db.one(`INSERT INTO notes (title, content, note_type, user_id) VALUES ($1,$2,$3,$4) returning *`, [noteInfo.title, noteInfo.content, noteInfo.note_type, req.user_id])
+        const note = await db.one(`INSERT INTO notes (title, content, note_type, user_id) VALUES ($1,$2,$3,$4) returning *`,
+        [noteInfo.title, noteInfo.content, noteInfo.note_type, req.user_id])
        
         return res.json({ note })
     } catch (err){
