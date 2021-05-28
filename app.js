@@ -29,6 +29,10 @@ app.use('/notes', [authorize], notesRouter);
 
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/chatSocket'); //change to app.js instead of index.html?
+  res.header("Access-Control-Allow-Credentials", true);
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+  res.header("Access-Control-Allow-Headers", 'Origin,X-Requested-With,Content-Type,Accept,content-type,application/json');
+  next();
 });
 
 module.exports = app;
