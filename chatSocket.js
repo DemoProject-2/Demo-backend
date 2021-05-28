@@ -5,6 +5,7 @@ const app = express();
 const path = require('path');
 const server = require('http').createServer(app);
 const url = process.env.NODE_ENV === 'production' ? 'https://mental-health-database.herokuapp.com' : 'http://localhost:3030'
+console.log(url);
 const io = require('socket.io')(server, {cors:{
   origin: url,
   methods: ["GET", "POST"]
